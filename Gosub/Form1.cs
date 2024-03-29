@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace Gosub
 {
     public partial class Form1 : Form
@@ -22,8 +23,7 @@ namespace Gosub
         }
 
         private void DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            MessageBox.Show(dataGridView1.Rows[e.RowIndex].Cells["ID"].Value.ToString());
+        { 
             string id = dataGridView1.Rows[e.RowIndex].Cells["ID"].Value.ToString();
             Thread th = new Thread(new ThreadStart(() =>
             {
@@ -42,7 +42,55 @@ namespace Gosub
                             if (o["transport"]["type"].ToString() == "RESTAURANT_DELIVERY")
                             {
                                 order_Detail_Frm.tabControl1.TabPages.Remove(order_Detail_Frm.deliverinfoPage);
+                                order_Detail_Frm.deliverType.Text = "가게배달";
                             }
+                            else
+                            {
+                                order_Detail_Frm.deliverType.ForeColor = Color.Red;
+                                order_Detail_Frm.deliverType.Text = "요기배달";
+                            }
+                            order_Detail_Frm.orderShortCode.Text = "#" + o["shortCode"].ToString();
+                            order_Detail_Frm.orderStatus.Text = o["state"].ToString();
+                            JToken menus = o["items"];
+                            int count = 0;
+                            foreach (JToken item in menus)
+                            {
+                                count++;
+                                FlowLayoutPanel Items = new FlowLayoutPanel();
+                                Items.FlowDirection = FlowDirection.TopDown;
+                                Items.MinimumSize = new Size(order_Detail_Frm.menu_Items.Width - 27, 25);
+
+
+                                Panel pn = new Panel() { Size = new Size(Items.Width, 25) };
+                                Label I_name = new Label() { Text = item["name"].ToString() + "*" + item["amount"].ToString(), Location = new Point(16, 0), Width = 300};
+                                Label I_subTotalPrice = new Label() { TextAlign = ContentAlignment.MiddleRight, Text = item["total"].ToString() + "원", Location = new Point(Items.Right - 120, 0) };
+
+                                pn.Controls.Add(I_name);
+                                pn.Controls.Add(I_subTotalPrice);
+
+                                Items.Controls.Add(pn);
+
+                                foreach (JToken I_options in item["modifiers"])
+                                {
+                                    Panel pn1 = new Panel() { Size = new Size(Items.Width, 25) };
+                                    Label I_optionName = new Label() { Text = I_options["name"].ToString() + "*" + I_options["amount"].ToString(), Location = new Point(30, 0), Width = 300};
+                                    Label I_optionPrice = new Label() { TextAlign = ContentAlignment.MiddleRight, Text = "+" + I_options["total"].ToString() + "원", Location = new Point(Items.Right - 120, 0) };
+
+
+                                    pn1.Controls.Add(I_optionName);
+                                    pn1.Controls.Add(I_optionPrice);
+
+                                    Items.Controls.Add(pn1);
+                                }
+
+                                Items.AutoSize = true;
+                                Items.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
+                                order_Detail_Frm.menu_Items.Controls.Add(Items);
+                            }
+                            order_Detail_Frm.totalMenuCount.Text = count.ToString();
+                            order_Detail_Frm.totalPrice.Text = o["payment"]["total"].ToString() + "원";
+                            order_Detail_Frm.orderShortInfo.Text = string.Format("메뉴{0}개 {1}원 {2}", count, o["payment"]["total"].ToString(), o["payment"]["paymentMethod"].ToString());
                             order_Detail_Frm.ShowDialog();
                         }
                     }   

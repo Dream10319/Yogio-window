@@ -36,14 +36,13 @@ namespace Gosub
 
 
                         JToken o = Helper_Class.Json_Responce(tx.Result.Content.ToString());
-
-
-
-                        //if (_result.IsSuccessful == true)
                         if (tx.Result.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             Order_Detail_frm order_Detail_Frm = new Order_Detail_frm();
-                            order_Detail_Frm.label1.Text = o["shortCode"].ToString();
+                            if (o["transport"]["type"].ToString() == "RESTAURANT_DELIVERY")
+                            {
+                                order_Detail_Frm.tabControl1.TabPages.Remove(order_Detail_Frm.deliverinfoPage);
+                            }
                             order_Detail_Frm.ShowDialog();
                         }
                     }   

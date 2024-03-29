@@ -18,9 +18,41 @@ namespace Gosub
         public Form1()
         {
             InitializeComponent();
+            dataGridView1.CellDoubleClick += DataGridView1_CellDoubleClick;
         }
 
-     
+        private void DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            MessageBox.Show(dataGridView1.Rows[e.RowIndex].Cells["ID"].Value.ToString());
+            string id = dataGridView1.Rows[e.RowIndex].Cells["ID"].Value.ToString();
+            Thread th = new Thread(new ThreadStart(() =>
+            {
+                Task<IRestResponse> tx = Task.Run(() => Helper_Class.Send_Request("https://crs.rpsyogiyo.io/api/1/deliveries/" + id, Method.GET, null));
+                tx.Wait();
+                this.Invoke(new Action(() => {
+
+                    if (!string.IsNullOrEmpty(tx.Result.Content))
+                    {
+
+
+                        JToken o = Helper_Class.Json_Responce(tx.Result.Content.ToString());
+
+
+
+                        //if (_result.IsSuccessful == true)
+                        if (tx.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            Order_Detail_frm order_Detail_Frm = new Order_Detail_frm();
+                            order_Detail_Frm.label1.Text = o["shortCode"].ToString();
+                            order_Detail_Frm.ShowDialog();
+                        }
+                    }   
+                }));
+
+            }));
+            th.Start();
+
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -305,6 +337,7 @@ namespace Gosub
                                 string str18 = x["seenAt"] != null ? x["seenAt"].ToString() : "";
                                 string str19 = x["timestamp"] != null ? x["timestamp"].ToString() : "";
                                 string str20 = x["state"] != null ? x["state"].ToString() : "";
+                                string str21 = x["id"].ToString();
 
                                 r.Cells.Add(new DataGridViewTextBoxCell() { Value = str1 });
                                 r.Cells.Add(new DataGridViewTextBoxCell() { Value = str2 });
@@ -326,7 +359,7 @@ namespace Gosub
                                 r.Cells.Add(new DataGridViewTextBoxCell() { Value = str18 });
                                 r.Cells.Add(new DataGridViewTextBoxCell() { Value = str19 });
                                 r.Cells.Add(new DataGridViewTextBoxCell() { Value = str20 });
-
+                                r.Cells.Add(new DataGridViewTextBoxCell() { Value = str21 });
 
                                 //if (x["items"] != null)
                                 //{

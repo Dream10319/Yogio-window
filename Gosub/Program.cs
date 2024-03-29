@@ -25,14 +25,14 @@ namespace Gosub
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072; // To Enable HTTPS
 
             string db_error= null;
-            try
+/*            try
             {
                 db.Open();
             }
             catch (Exception db_ex)
             {
                 db_error = db_ex.Message;
-            }
+            }*/
            
 
 

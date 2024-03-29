@@ -38,26 +38,6 @@ namespace Gosub
             this.label2 = new System.Windows.Forms.Label();
             this.ToDate = new System.Windows.Forms.DateTimePicker();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.shortCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vendorName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.address = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.customer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.itemsname = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.itemsamount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.itemsprice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.feesname = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.feesvalue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.paymentMethod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.acceptedAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.accepter = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deliverAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.expiresAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.promisedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.seenAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.timestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.state = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.order_accepted = new System.Windows.Forms.RadioButton();
             this.order_new = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
@@ -81,6 +61,27 @@ namespace Gosub
             this.button5 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.shortCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vendorName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.customer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.itemsname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.itemsamount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.itemsprice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.feesname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.feesvalue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.paymentMethod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.acceptedAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.accepter = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deliverAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.expiresAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.promisedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.seenAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.state = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -173,128 +174,14 @@ namespace Gosub
             this.promisedTime,
             this.seenAt,
             this.timestamp,
-            this.state});
+            this.state,
+            this.ID});
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(736, 412);
             this.dataGridView1.TabIndex = 16;
-            // 
-            // shortCode
-            // 
-            this.shortCode.HeaderText = "Order No";
-            this.shortCode.Name = "shortCode";
-            // 
-            // vendorName
-            // 
-            this.vendorName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.vendorName.HeaderText = "Vendor Name";
-            this.vendorName.Name = "vendorName";
-            this.vendorName.Width = 122;
-            // 
-            // address
-            // 
-            this.address.HeaderText = "Address";
-            this.address.Name = "address";
-            // 
-            // customer
-            // 
-            this.customer.HeaderText = "Customer";
-            this.customer.Name = "customer";
-            // 
-            // comment
-            // 
-            this.comment.HeaderText = "Comment";
-            this.comment.Name = "comment";
-            // 
-            // itemsname
-            // 
-            this.itemsname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.itemsname.HeaderText = "Items Name";
-            this.itemsname.Name = "itemsname";
-            this.itemsname.Width = 113;
-            // 
-            // itemsamount
-            // 
-            this.itemsamount.HeaderText = "Items Amount";
-            this.itemsamount.Name = "itemsamount";
-            // 
-            // itemsprice
-            // 
-            this.itemsprice.HeaderText = "Items Price";
-            this.itemsprice.Name = "itemsprice";
-            // 
-            // feesname
-            // 
-            this.feesname.HeaderText = "Fees Name";
-            this.feesname.Name = "feesname";
-            // 
-            // feesvalue
-            // 
-            this.feesvalue.HeaderText = "Fees Value";
-            this.feesvalue.Name = "feesvalue";
-            // 
-            // Total
-            // 
-            this.Total.HeaderText = "Total";
-            this.Total.Name = "Total";
-            // 
-            // paymentMethod
-            // 
-            this.paymentMethod.HeaderText = "Paid With";
-            this.paymentMethod.Name = "paymentMethod";
-            // 
-            // acceptedAt
-            // 
-            this.acceptedAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.acceptedAt.HeaderText = "Accepted At";
-            this.acceptedAt.Name = "acceptedAt";
-            this.acceptedAt.Width = 111;
-            // 
-            // accepter
-            // 
-            this.accepter.HeaderText = "Accepter";
-            this.accepter.Name = "accepter";
-            // 
-            // deliverAt
-            // 
-            this.deliverAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.deliverAt.HeaderText = "Deliver At";
-            this.deliverAt.Name = "deliverAt";
-            this.deliverAt.Width = 99;
-            // 
-            // expiresAt
-            // 
-            this.expiresAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.expiresAt.HeaderText = "Expires At";
-            this.expiresAt.Name = "expiresAt";
-            // 
-            // promisedTime
-            // 
-            this.promisedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.promisedTime.HeaderText = "Promised Time";
-            this.promisedTime.Name = "promisedTime";
-            this.promisedTime.Width = 131;
-            // 
-            // seenAt
-            // 
-            this.seenAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.seenAt.HeaderText = "Seen At";
-            this.seenAt.Name = "seenAt";
-            this.seenAt.Width = 83;
-            // 
-            // timestamp
-            // 
-            this.timestamp.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.timestamp.HeaderText = "Times Samp";
-            this.timestamp.Name = "timestamp";
-            this.timestamp.Width = 112;
-            // 
-            // state
-            // 
-            this.state.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.state.HeaderText = "State";
-            this.state.Name = "state";
-            this.state.Width = 73;
             // 
             // order_accepted
             // 
@@ -554,6 +441,150 @@ namespace Gosub
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // shortCode
+            // 
+            this.shortCode.HeaderText = "Order No";
+            this.shortCode.Name = "shortCode";
+            this.shortCode.ReadOnly = true;
+            // 
+            // vendorName
+            // 
+            this.vendorName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.vendorName.HeaderText = "Vendor Name";
+            this.vendorName.Name = "vendorName";
+            this.vendorName.ReadOnly = true;
+            this.vendorName.Width = 122;
+            // 
+            // address
+            // 
+            this.address.HeaderText = "Address";
+            this.address.Name = "address";
+            this.address.ReadOnly = true;
+            // 
+            // customer
+            // 
+            this.customer.HeaderText = "Customer";
+            this.customer.Name = "customer";
+            this.customer.ReadOnly = true;
+            // 
+            // comment
+            // 
+            this.comment.HeaderText = "Comment";
+            this.comment.Name = "comment";
+            this.comment.ReadOnly = true;
+            // 
+            // itemsname
+            // 
+            this.itemsname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.itemsname.HeaderText = "Items Name";
+            this.itemsname.Name = "itemsname";
+            this.itemsname.ReadOnly = true;
+            this.itemsname.Width = 113;
+            // 
+            // itemsamount
+            // 
+            this.itemsamount.HeaderText = "Items Amount";
+            this.itemsamount.Name = "itemsamount";
+            this.itemsamount.ReadOnly = true;
+            // 
+            // itemsprice
+            // 
+            this.itemsprice.HeaderText = "Items Price";
+            this.itemsprice.Name = "itemsprice";
+            this.itemsprice.ReadOnly = true;
+            // 
+            // feesname
+            // 
+            this.feesname.HeaderText = "Fees Name";
+            this.feesname.Name = "feesname";
+            this.feesname.ReadOnly = true;
+            // 
+            // feesvalue
+            // 
+            this.feesvalue.HeaderText = "Fees Value";
+            this.feesvalue.Name = "feesvalue";
+            this.feesvalue.ReadOnly = true;
+            // 
+            // Total
+            // 
+            this.Total.HeaderText = "Total";
+            this.Total.Name = "Total";
+            this.Total.ReadOnly = true;
+            // 
+            // paymentMethod
+            // 
+            this.paymentMethod.HeaderText = "Paid With";
+            this.paymentMethod.Name = "paymentMethod";
+            this.paymentMethod.ReadOnly = true;
+            // 
+            // acceptedAt
+            // 
+            this.acceptedAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.acceptedAt.HeaderText = "Accepted At";
+            this.acceptedAt.Name = "acceptedAt";
+            this.acceptedAt.ReadOnly = true;
+            this.acceptedAt.Width = 111;
+            // 
+            // accepter
+            // 
+            this.accepter.HeaderText = "Accepter";
+            this.accepter.Name = "accepter";
+            this.accepter.ReadOnly = true;
+            // 
+            // deliverAt
+            // 
+            this.deliverAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.deliverAt.HeaderText = "Deliver At";
+            this.deliverAt.Name = "deliverAt";
+            this.deliverAt.ReadOnly = true;
+            this.deliverAt.Width = 99;
+            // 
+            // expiresAt
+            // 
+            this.expiresAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.expiresAt.HeaderText = "Expires At";
+            this.expiresAt.Name = "expiresAt";
+            this.expiresAt.ReadOnly = true;
+            // 
+            // promisedTime
+            // 
+            this.promisedTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.promisedTime.HeaderText = "Promised Time";
+            this.promisedTime.Name = "promisedTime";
+            this.promisedTime.ReadOnly = true;
+            this.promisedTime.Width = 131;
+            // 
+            // seenAt
+            // 
+            this.seenAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.seenAt.HeaderText = "Seen At";
+            this.seenAt.Name = "seenAt";
+            this.seenAt.ReadOnly = true;
+            this.seenAt.Width = 83;
+            // 
+            // timestamp
+            // 
+            this.timestamp.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.timestamp.HeaderText = "Times Samp";
+            this.timestamp.Name = "timestamp";
+            this.timestamp.ReadOnly = true;
+            this.timestamp.Width = 112;
+            // 
+            // state
+            // 
+            this.state.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.state.HeaderText = "State";
+            this.state.Name = "state";
+            this.state.ReadOnly = true;
+            this.state.Width = 73;
+            // 
+            // ID
+            // 
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -620,6 +651,13 @@ namespace Gosub
         internal System.Windows.Forms.Panel panel1;
         internal System.Windows.Forms.Button button5;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.FlowLayoutPanel Restaurants;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DataGridViewTextBoxColumn shortCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn vendorName;
         private System.Windows.Forms.DataGridViewTextBoxColumn address;
@@ -640,13 +678,7 @@ namespace Gosub
         private System.Windows.Forms.DataGridViewTextBoxColumn seenAt;
         private System.Windows.Forms.DataGridViewTextBoxColumn timestamp;
         private System.Windows.Forms.DataGridViewTextBoxColumn state;
-        private System.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.FlowLayoutPanel Restaurants;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
     }
 }
 

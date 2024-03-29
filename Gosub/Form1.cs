@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
+using System.Data.SqlTypes;
 
 
 namespace Gosub
@@ -43,11 +45,41 @@ namespace Gosub
                             {
                                 order_Detail_Frm.tabControl1.TabPages.Remove(order_Detail_Frm.deliverinfoPage);
                                 order_Detail_Frm.deliverType.Text = "가게배달";
+                                order_Detail_Frm.deliveryType.Text = "가게배달";
                             }
                             else
                             {
                                 order_Detail_Frm.deliverType.ForeColor = Color.Red;
                                 order_Detail_Frm.deliverType.Text = "요기배달";
+                                order_Detail_Frm.deliveryType.Text = "요기배달(실속)";
+                                if(o["transport"]["acceptedAt"] == null)
+                                {
+                                    order_Detail_Frm.progressBar1.Value = 0;
+                                    order_Detail_Frm.assignTime.Text = "00:00";
+                                }
+                                else
+                                {
+                                    order_Detail_Frm.progressBar1.Value = 10;
+                                    order_Detail_Frm.assignTime.Text = ConvertAndFormatTime2(o["transport"]["acceptedAt"].ToString());
+                                }
+                                if (o["transport"]["dispatchedAt"] == null)
+                                {
+                                    order_Detail_Frm.pickupTime.Text = "00:00";
+                                }
+                                else
+                                {
+                                    order_Detail_Frm.progressBar1.Value = 60;
+                                    order_Detail_Frm.pickupTime.Text = ConvertAndFormatTime2(o["transport"]["dispatchedAt"].ToString());
+                                }
+                                if (o["transport"]["dispatchedAt"] == null)
+                                {
+                                    order_Detail_Frm.deliverTime.Text = "00:00";
+                                }
+                                else
+                                {
+                                    order_Detail_Frm.progressBar1.Value = 100;
+                                    order_Detail_Frm.deliverTime.Text = ConvertAndFormatTime2(o["transport"]["deliveredAt"].ToString());
+                                }
                             }
                             order_Detail_Frm.orderShortCode.Text = "#" + o["shortCode"].ToString();
                             order_Detail_Frm.orderStatus.Text = o["state"].ToString();
@@ -85,11 +117,46 @@ namespace Gosub
 
                                 Items.AutoSize = true;
                                 Items.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                                order_Detail_Frm.menu_Items.Controls.Add(Items);
+                            }
+                            foreach (JToken fee in o["fees"])
+                            {
+                                FlowLayoutPanel Items = new FlowLayoutPanel();
+                                Items.FlowDirection = FlowDirection.TopDown;
+                                Items.MinimumSize = new Size(order_Detail_Frm.menu_Items.Width - 27, 25);
 
+                                Panel pn2 = new Panel() { Size = new Size(Items.Width, 25) };
+                                Label FeeName = new Label() { Text = fee["name"].ToString(), Location = new Point(16, 0), Width = 300 };
+                                Label FeePrice = new Label() { TextAlign = ContentAlignment.MiddleRight, Text = fee["value"].ToString() + "원", Location = new Point(Items.Right - 120, 0) };
+
+                                pn2.Controls.Add(FeeName);
+                                pn2.Controls.Add(FeePrice);
+                                Items.Controls.Add(pn2);
+                                Items.AutoSize = true;
+                                Items.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                                 order_Detail_Frm.menu_Items.Controls.Add(Items);
                             }
                             order_Detail_Frm.totalMenuCount.Text = count.ToString();
                             order_Detail_Frm.totalPrice.Text = o["payment"]["total"].ToString() + "원";
+
+                            string[] comment = o["comment"].ToString().Split('/');
+                            order_Detail_Frm.storeRequest.Text = string.Join(" / ", comment, 0, comment.Length - 1).Trim();
+                            order_Detail_Frm.riderRequest.Text = o["requirements"]["commentToRider"].ToString();
+
+                            order_Detail_Frm.customerPhone.Text = o["customer"]["phone"].ToString();
+                            order_Detail_Frm.storeName.Text = o["vendorName"].ToString();
+                            order_Detail_Frm.orderNumber.Text = o["externalId"].ToString();
+                            order_Detail_Frm.orderTime.Text = ConvertAndFormatTime1(o["timestamp"].ToString());
+                            string address = o["address"]["street"].ToString();
+                            if(address.Length > 20)
+                            {
+                                order_Detail_Frm.deliverAddress.Text = address.Substring(0, 20) + "...";
+                            }
+                            else
+                            {
+                                order_Detail_Frm.deliverAddress.Text = address;
+                            }
+
                             order_Detail_Frm.orderShortInfo.Text = string.Format("메뉴{0}개 {1}원 {2}", count, o["payment"]["total"].ToString(), o["payment"]["paymentMethod"].ToString());
                             order_Detail_Frm.ShowDialog();
                         }
@@ -1165,6 +1232,42 @@ namespace Gosub
         {
             Login_frm frm = new Login_frm();
             frm.ShowDialog(this);
+        }
+
+        static string ConvertAndFormatTime1(string timeString)
+        {
+            // Parse the timestamp string into a DateTimeOffset object
+            DateTimeOffset kstTime = DateTimeOffset.Parse(timeString);
+
+            // Get the KST time zone
+            TimeZoneInfo kstTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time");
+
+            // Convert KST time to local time
+            DateTime localTime = TimeZoneInfo.ConvertTime(kstTime.DateTime, kstTimeZone, TimeZoneInfo.Local);
+
+            // Format the local time using custom formatting
+            string formattedTime = localTime.ToString("HH:mm:ss MM'월'dd'일'(ddd)", new System.Globalization.CultureInfo("ko-KR"));
+
+            return formattedTime;
+        }
+
+        static string ConvertAndFormatTime2(string timeString)
+        {
+
+            // Parse the timestamp string into a DateTimeOffset object
+            DateTimeOffset kstTime = DateTimeOffset.Parse(timeString);
+
+            // Get the KST time zone
+            TimeZoneInfo kstTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time");
+
+            // Convert KST time to local time
+            DateTime localTime = TimeZoneInfo.ConvertTime(kstTime.DateTime, kstTimeZone, TimeZoneInfo.Local);
+
+            // Format the local time as desired ("오후 1:12")
+            string formattedTime = localTime.ToString("tt h:mm", new System.Globalization.CultureInfo("ko-KR"));
+
+
+            return formattedTime;
         }
     }
 }

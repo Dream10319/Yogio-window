@@ -16,5 +16,20 @@ namespace Gosub
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(riderRequest.Text);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(orderNumber.Text);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(customerPhone.Text);
+        }
     }
 }

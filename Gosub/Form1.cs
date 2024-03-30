@@ -139,9 +139,19 @@ namespace Gosub
                             order_Detail_Frm.totalMenuCount.Text = count.ToString();
                             order_Detail_Frm.totalPrice.Text = o["payment"]["total"].ToString() + "원";
 
-                            string[] comment = o["comment"].ToString().Split('/');
-                            order_Detail_Frm.storeRequest.Text = string.Join(" / ", comment, 0, comment.Length - 1).Trim();
-                            order_Detail_Frm.riderRequest.Text = o["requirements"]["commentToRider"].ToString();
+                            
+                            if(o["requirements"] != null)
+                            {
+                                string[] comment = o["comment"].ToString().Split('/');
+                                order_Detail_Frm.storeRequest.Text = string.Join(" / ", comment, 0, comment.Length - 1).Trim();
+                                order_Detail_Frm.riderRequest.Text = o["requirements"]["commentToRider"].ToString();
+                            }
+                            else
+                            {
+                                order_Detail_Frm.storeRequest.Text = o["comment"].ToString();
+                                order_Detail_Frm.riderRequest.Text = "";
+                                order_Detail_Frm.button1.Visible = false;
+                            }
 
                             order_Detail_Frm.customerPhone.Text = o["customer"]["phone"].ToString();
                             order_Detail_Frm.storeName.Text = o["vendorName"].ToString();

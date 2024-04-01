@@ -46,6 +46,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.menu_Items = new System.Windows.Forms.FlowLayoutPanel();
             this.reqinfoPage = new System.Windows.Forms.TabPage();
+            this.comment = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.riderRequest = new System.Windows.Forms.Label();
             this.storeRequest = new System.Windows.Forms.Label();
@@ -278,6 +279,7 @@
             // 
             // reqinfoPage
             // 
+            this.reqinfoPage.Controls.Add(this.comment);
             this.reqinfoPage.Controls.Add(this.button1);
             this.reqinfoPage.Controls.Add(this.riderRequest);
             this.reqinfoPage.Controls.Add(this.storeRequest);
@@ -289,6 +291,16 @@
             this.reqinfoPage.TabIndex = 2;
             this.reqinfoPage.Text = "요청사항";
             this.reqinfoPage.UseVisualStyleBackColor = true;
+            // 
+            // comment
+            // 
+            this.comment.AutoSize = true;
+            this.comment.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comment.Location = new System.Drawing.Point(17, 137);
+            this.comment.Name = "comment";
+            this.comment.Size = new System.Drawing.Size(80, 23);
+            this.comment.TabIndex = 5;
+            this.comment.Text = "label13";
             // 
             // button1
             // 
@@ -590,8 +602,6 @@
         internal System.Windows.Forms.FlowLayoutPanel menu_Items;
         internal System.Windows.Forms.Label totalPrice;
         internal System.Windows.Forms.Label riderRequest;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
         internal System.Windows.Forms.Label storeRequest;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
@@ -618,5 +628,8 @@
         internal System.Windows.Forms.Label assignTime;
         internal System.Windows.Forms.ProgressBar progressBar1;
         internal System.Windows.Forms.Button button1;
+        internal System.Windows.Forms.Label comment;
+        internal System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.Label label2;
     }
 }

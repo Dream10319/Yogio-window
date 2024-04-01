@@ -142,15 +142,23 @@ namespace Gosub
                             
                             if(o["requirements"] != null)
                             {
-                                string[] comment = o["comment"].ToString().Split('/');
-                                order_Detail_Frm.storeRequest.Text = string.Join(" / ", comment, 0, comment.Length - 1).Trim();
+                                order_Detail_Frm.storeRequest.Text = o["requirements"]["commentToVendor"].ToString();
                                 order_Detail_Frm.riderRequest.Text = o["requirements"]["commentToRider"].ToString();
+                                order_Detail_Frm.comment.Visible = false;
                             }
                             else
                             {
-                                order_Detail_Frm.storeRequest.Text = o["comment"].ToString();
-                                order_Detail_Frm.riderRequest.Text = "";
+                                string comment = o["comment"].ToString(); 
+                                if (comment.Length > 40)
+                                {
+                                    comment = comment.Insert(40, Environment.NewLine);
+                                }
+                                order_Detail_Frm.comment.Text = comment;
                                 order_Detail_Frm.button1.Visible = false;
+                                order_Detail_Frm.storeRequest.Visible = false;
+                                order_Detail_Frm.riderRequest.Visible = false;
+                                order_Detail_Frm.label2.Visible = false;
+                                order_Detail_Frm.label3.Visible = false;
                             }
 
                             order_Detail_Frm.customerPhone.Text = o["customer"]["phone"].ToString();

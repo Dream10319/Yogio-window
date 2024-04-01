@@ -91,7 +91,7 @@ namespace Gosub
             th.Start();
 
 
-            for (int i = 25; i <= 95; i+=5)
+            for (int i = 10; i <= 30; i+=5)
             {
                 RadioButton bt = new RadioButton()
                 {

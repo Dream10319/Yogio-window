@@ -368,15 +368,21 @@ namespace Gosub
 
             //var duplicatedDictionaryExample = new List<(string Key, string Value)> { ("", "")... }
 
-         
 
-           
+
+
 
             //var P_client = new RestClient("https://crs.rpsyogiyo.io/api/2/deliveries?from=2022-04-23T22%3A00%3A00.000Z&statuses=EXPIRED&to=2022-04-24T21%3A59%3A59.999Z");
 
 
-        
-            QueryParameters.Add(new Tuple<string, string>("from", this.FromDate.Value.ToString("yyyy-MM-dd") + "T12:14:20.073Z"));
+            if (order_accepted.Checked)
+            {
+                QueryParameters.Add(new Tuple<string, string>("from", DateTime.Today.ToString("yyyy-MM-dd") + "T00:00:00.000Z"));
+            }
+            else
+            {
+                QueryParameters.Add(new Tuple<string, string>("from", this.FromDate.Value.ToString("yyyy-MM-dd") + "T12:14:20.073Z"));
+            }
 
             if (order_accepted.Checked == true)
             {
@@ -411,10 +417,14 @@ namespace Gosub
 
             }
 
-
-
-             QueryParameters.Add(new Tuple<string, string>("to", this.ToDate.Value.ToString("yyyy-MM-dd") + "T12:14:20.073Z"));
-
+            if (order_accepted.Checked)
+            {
+                QueryParameters.Add(new Tuple<string, string>("to", DateTime.Today.ToString("yyyy-MM-dd") + "T23:59:59.999Z"));
+            }
+            else
+            {
+                QueryParameters.Add(new Tuple<string, string>("to", this.ToDate.Value.ToString("yyyy-MM-dd") + "T12:14:20.073Z"));
+            }
 
 
             Thread th = new Thread(new ThreadStart(() =>

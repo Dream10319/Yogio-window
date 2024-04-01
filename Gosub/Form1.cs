@@ -93,7 +93,7 @@ namespace Gosub
                                 }
                             }
 
-                            if(o["preparationCompleted"].ToString() == "false")
+                            if(o["preparationCompleted"].ToString().ToLower() == "false")
                             {
                                 order_Detail_Frm.cookButton.Visible = true;
                             }     
@@ -212,16 +212,15 @@ namespace Gosub
         {
             Thread th = new Thread(new ThreadStart(() =>
             {
-                Task<IRestResponse> tx = Task.Run(() => Helper_Class.Send_Request($"https://crs.rpsyogiyo.io/api/1/deliveries/{id}/preparation-completion", Method.POST, null, "{}"));
-                tx.Wait();
-                JToken o = Helper_Class.Json_Responce(tx.Result.Content.ToString());
-
-                if (tx.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                try
                 {
-                    if (o.SelectToken("code").ToString() == "SUCCESS")
-                    {
-                        MessageBox.Show("Cooked successfully!");
-                    }
+                    Task<IRestResponse> tx = Task.Run(() => Helper_Class.Send_Request($"https://crs.rpsyogiyo.io/api/1/deliveries/{id}/preparation-completion", Method.POST, null, "{}"));
+                    tx.Wait();
+                    MessageBox.Show("Cooked successfully!");
+                }
+                catch
+                {
+                    MessageBox.Show("Can't complete cook");
                 }
 
             }));

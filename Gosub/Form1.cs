@@ -375,14 +375,9 @@ namespace Gosub
             //var P_client = new RestClient("https://crs.rpsyogiyo.io/api/2/deliveries?from=2022-04-23T22%3A00%3A00.000Z&statuses=EXPIRED&to=2022-04-24T21%3A59%3A59.999Z");
 
 
-            if (order_accepted.Checked)
-            {
-                QueryParameters.Add(new Tuple<string, string>("from", DateTime.Today.ToString("yyyy-MM-dd") + "T00:00:00.000Z"));
-            }
-            else
-            {
-                QueryParameters.Add(new Tuple<string, string>("from", this.FromDate.Value.ToString("yyyy-MM-dd") + "T12:14:20.073Z"));
-            }
+
+            QueryParameters.Add(new Tuple<string, string>("from", this.FromDate.Value.ToString("yyyy-MM-dd") + "T00:00:00.999Z"));
+
 
             if (order_accepted.Checked == true)
             {
@@ -417,14 +412,7 @@ namespace Gosub
 
             }
 
-            if (order_accepted.Checked)
-            {
-                QueryParameters.Add(new Tuple<string, string>("to", DateTime.Today.ToString("yyyy-MM-dd") + "T23:59:59.999Z"));
-            }
-            else
-            {
-                QueryParameters.Add(new Tuple<string, string>("to", this.ToDate.Value.ToString("yyyy-MM-dd") + "T12:14:20.073Z"));
-            }
+            QueryParameters.Add(new Tuple<string, string>("to", this.ToDate.Value.ToString("yyyy-MM-dd") + "T23:59:59.999Z"));
 
 
             Thread th = new Thread(new ThreadStart(() =>
@@ -456,7 +444,11 @@ namespace Gosub
 
                                 string str1 = x.SelectToken("shortCode") != null ? x.SelectToken("shortCode").ToString() : "";
                                 string str2 = x.SelectToken("vendorName") != null ? x.SelectToken("vendorName").ToString() : "";
-                                string str3 = x["address"]["street"] != null ? x["address"]["street"].ToString() : "";
+                                string str3 = "";
+                                if (x["address"] != null)
+                                {
+                                    str3 = x["address"]["street"] != null ? x["address"]["street"].ToString() : "";
+                                }
                                 string str4 = x["customer"]["phone"] != null ? x["customer"]["phone"].ToString() : "";
                                 string str5 = x["items"][0]["comment"] != null ? x["items"][0]["comment"].ToString() : "";
                                 string str6 = x["items"][0]["name"] != null ? x["items"][0]["name"].ToString() : "";
@@ -464,10 +456,13 @@ namespace Gosub
                                 string str8 = x["items"][0]["price"] != null ? x["items"][0]["name"].ToString() : "";
                                 string str9 = "";
                                 string str10 = "";
-                                if (x["fees"].Count() != 0)
+                                if(x["fees"] != null)
                                 {
-                                    str9 = x["fees"] != null ? x["fees"][0]["name"].ToString() : "";
-                                    str10 = x["fees"] != null ? x["fees"][0]["value"].ToString() : "";
+                                    if (x["fees"].Count() != 0)
+                                    {
+                                        str9 = x["fees"] != null ? x["fees"][0]["name"].ToString() : "";
+                                        str10 = x["fees"] != null ? x["fees"][0]["value"].ToString() : "";
+                                    }
                                 }
                                 string str11 = x["payment"]["total"] != null ? x["payment"]["total"].ToString() : "";
                                 string str12 = x["payment"] != null ? x["payment"]["paymentMethod"].ToString() : "";
@@ -1296,6 +1291,17 @@ namespace Gosub
 
 
             return formattedTime;
+        }
+
+        static DateTime ConvertToKST(DateTime localTime)
+        {
+            // Get the time zone info for the KST time zone
+            TimeZoneInfo kstTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time");
+
+            // Convert local time to KST time
+            DateTime kstTime = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Local, kstTimeZone);
+
+            return kstTime;
         }
     }
 }

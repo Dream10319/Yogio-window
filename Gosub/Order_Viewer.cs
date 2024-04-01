@@ -132,7 +132,7 @@ namespace Gosub
 
             if(r.Checked == true)
             {
-                this.Accept_Button.Text = $"Deliver in {r.Tag.ToString()} min";
+                this.Accept_Button.Text = $"Select cooking time to {r.Tag.ToString()} min";
                 this.Accept_Button.Tag = r.Tag;
             }
          

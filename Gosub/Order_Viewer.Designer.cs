@@ -149,7 +149,7 @@
             this.Accept_Button.Size = new System.Drawing.Size(250, 53);
             this.Accept_Button.TabIndex = 6;
             this.Accept_Button.Tag = "15";
-            this.Accept_Button.Text = "Deliver in 15 min";
+            this.Accept_Button.Text = "Select cooking time to 15 min";
             this.Accept_Button.UseVisualStyleBackColor = false;
             this.Accept_Button.Click += new System.EventHandler(this.Accept_Button_Click);
             // 

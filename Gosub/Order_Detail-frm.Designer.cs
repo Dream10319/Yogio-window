@@ -71,6 +71,8 @@
             this.orderShortCode = new System.Windows.Forms.Label();
             this.orderStatus = new System.Windows.Forms.Label();
             this.orderShortInfo = new System.Windows.Forms.Label();
+            this.timeInfo = new System.Windows.Forms.Label();
+            this.cookButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.deliverinfoPage.SuspendLayout();
             this.menuinfoPage.SuspendLayout();
@@ -557,11 +559,33 @@
             this.orderShortInfo.TabIndex = 4;
             this.orderShortInfo.Text = "label1";
             // 
+            // timeInfo
+            // 
+            this.timeInfo.AutoSize = true;
+            this.timeInfo.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timeInfo.Location = new System.Drawing.Point(256, 50);
+            this.timeInfo.Name = "timeInfo";
+            this.timeInfo.Size = new System.Drawing.Size(0, 23);
+            this.timeInfo.TabIndex = 14;
+            // 
+            // cookButton
+            // 
+            this.cookButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.cookButton.Location = new System.Drawing.Point(490, 35);
+            this.cookButton.Name = "cookButton";
+            this.cookButton.Size = new System.Drawing.Size(75, 37);
+            this.cookButton.TabIndex = 15;
+            this.cookButton.Text = "Cooked";
+            this.cookButton.UseVisualStyleBackColor = false;
+            this.cookButton.Visible = false;
+            // 
             // Order_Detail_frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(581, 418);
+            this.Controls.Add(this.cookButton);
+            this.Controls.Add(this.timeInfo);
             this.Controls.Add(this.orderShortInfo);
             this.Controls.Add(this.orderStatus);
             this.Controls.Add(this.orderShortCode);
@@ -631,5 +655,7 @@
         internal System.Windows.Forms.Label comment;
         internal System.Windows.Forms.Label label3;
         internal System.Windows.Forms.Label label2;
+        internal System.Windows.Forms.Label timeInfo;
+        internal System.Windows.Forms.Button cookButton;
     }
 }

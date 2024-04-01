@@ -61,6 +61,9 @@ namespace Gosub
                                 {
                                     order_Detail_Frm.progressBar1.Value = 10;
                                     order_Detail_Frm.assignTime.Text = ConvertAndFormatTime2(o["transport"]["acceptedAt"].ToString());
+                                    order_Detail_Frm.timeInfo.Text = string.Format("픽업까지 {0}분 남음", CalculateTimeDifferenceInMinutes(TimeZoneInfo.ConvertTimeToUtc(DateTime.Now).ToString("yyyy-MM-ddTHH:mm:ss.fff"), o["transport"]["pickupTime"].ToString()));
+                                    order_Detail_Frm.cookButton.Visible = true;
+                                    order_Detail_Frm.cookButton.Click += (ss, ee) => CookButton_Click(id);
                                 }
                                 if (o["transport"]["dispatchedAt"] == null)
                                 {
@@ -70,8 +73,18 @@ namespace Gosub
                                 {
                                     order_Detail_Frm.progressBar1.Value = 60;
                                     order_Detail_Frm.pickupTime.Text = ConvertAndFormatTime2(o["transport"]["dispatchedAt"].ToString());
+                                    int deliverRestTime = CalculateTimeDifferenceInMinutes(TimeZoneInfo.ConvertTimeToUtc(DateTime.Now).ToString("yyyy-MM-ddTHH:mm:ss.fff"), o["transport"]["deliverTime"].ToString());
+                                    if(deliverRestTime > 0)
+                                    {
+                                        order_Detail_Frm.timeInfo.Text = string.Format("배달 완료까지 {0}분 남음", deliverRestTime);
+                                    }
+                                    else
+                                    {
+                                        order_Detail_Frm.timeInfo.Text = string.Format("배달 완료 시간 {0}분 지남", deliverRestTime);
+                                    }
+                                    order_Detail_Frm.cookButton.Visible = false;
                                 }
-                                if (o["transport"]["dispatchedAt"] == null)
+                                if (o["transport"]["deliveredAt"] == null)
                                 {
                                     order_Detail_Frm.deliverTime.Text = "00:00";
                                 }
@@ -79,6 +92,8 @@ namespace Gosub
                                 {
                                     order_Detail_Frm.progressBar1.Value = 100;
                                     order_Detail_Frm.deliverTime.Text = ConvertAndFormatTime2(o["transport"]["deliveredAt"].ToString());
+                                    order_Detail_Frm.timeInfo.Text = "";
+                                    order_Detail_Frm.cookButton.Visible = false;
                                 }
                             }
                             order_Detail_Frm.orderShortCode.Text = "#" + o["shortCode"].ToString();
@@ -87,7 +102,7 @@ namespace Gosub
                             int count = 0;
                             foreach (JToken item in menus)
                             {
-                                count++;
+                                count += (int)item["amount"];
                                 FlowLayoutPanel Items = new FlowLayoutPanel();
                                 Items.FlowDirection = FlowDirection.TopDown;
                                 Items.MinimumSize = new Size(order_Detail_Frm.menu_Items.Width - 27, 25);
@@ -119,23 +134,27 @@ namespace Gosub
                                 Items.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                                 order_Detail_Frm.menu_Items.Controls.Add(Items);
                             }
-                            foreach (JToken fee in o["fees"])
+                            if (o["fees"] != null)
                             {
-                                FlowLayoutPanel Items = new FlowLayoutPanel();
-                                Items.FlowDirection = FlowDirection.TopDown;
-                                Items.MinimumSize = new Size(order_Detail_Frm.menu_Items.Width - 27, 25);
+                                foreach (JToken fee in o["fees"])
+                                {
+                                    FlowLayoutPanel Items = new FlowLayoutPanel();
+                                    Items.FlowDirection = FlowDirection.TopDown;
+                                    Items.MinimumSize = new Size(order_Detail_Frm.menu_Items.Width - 27, 25);
 
-                                Panel pn2 = new Panel() { Size = new Size(Items.Width, 25) };
-                                Label FeeName = new Label() { Text = fee["name"].ToString(), Location = new Point(16, 0), Width = 300 };
-                                Label FeePrice = new Label() { TextAlign = ContentAlignment.MiddleRight, Text = fee["value"].ToString() + "원", Location = new Point(Items.Right - 120, 0) };
+                                    Panel pn2 = new Panel() { Size = new Size(Items.Width, 25) };
+                                    Label FeeName = new Label() { Text = fee["name"].ToString(), Location = new Point(16, 0), Width = 300 };
+                                    Label FeePrice = new Label() { TextAlign = ContentAlignment.MiddleRight, Text = fee["value"].ToString() + "원", Location = new Point(Items.Right - 120, 0) };
 
-                                pn2.Controls.Add(FeeName);
-                                pn2.Controls.Add(FeePrice);
-                                Items.Controls.Add(pn2);
-                                Items.AutoSize = true;
-                                Items.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                                order_Detail_Frm.menu_Items.Controls.Add(Items);
+                                    pn2.Controls.Add(FeeName);
+                                    pn2.Controls.Add(FeePrice);
+                                    Items.Controls.Add(pn2);
+                                    Items.AutoSize = true;
+                                    Items.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                                    order_Detail_Frm.menu_Items.Controls.Add(Items);
+                                }
                             }
+     
                             order_Detail_Frm.totalMenuCount.Text = count.ToString();
                             order_Detail_Frm.totalPrice.Text = o["payment"]["total"].ToString() + "원";
 
@@ -184,6 +203,30 @@ namespace Gosub
             }));
             th.Start();
 
+        }
+
+        private void CookButton_Click(string id)
+        {
+            Thread th = new Thread(new ThreadStart(() =>
+            {
+                Task<IRestResponse> tx = Task.Run(() => Helper_Class.Send_Request($"https://crs.rpsyogiyo.io/api/1/deliveries/{id}/preparation-completion", Method.POST, null, "{}"));
+                tx.Wait();
+                if (!string.IsNullOrEmpty(tx.Result.Content))
+                {
+                    JToken o = Helper_Class.Json_Responce(tx.Result.Content.ToString());
+
+
+                    if (tx.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        if (o.SelectToken("code").ToString() == "SUCCESS")
+                        {
+                            MessageBox.Show("Cooked successfully!");
+                        }
+                    }
+                }
+
+            }));
+            th.Start();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -1260,16 +1303,17 @@ namespace Gosub
         static string ConvertAndFormatTime1(string timeString)
         {
             // Parse the timestamp string into a DateTimeOffset object
-            DateTimeOffset kstTime = DateTimeOffset.Parse(timeString);
+            DateTime utcTime = DateTime.Parse(timeString);
 
-            // Get the KST time zone
-            TimeZoneInfo kstTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time");
+            string timeZoneId = "Korea Standard Time";
 
-            // Convert KST time to local time
-            DateTime localTime = TimeZoneInfo.ConvertTime(kstTime.DateTime, kstTimeZone, TimeZoneInfo.Local);
+            // Get the time zone information for KST
+            TimeZoneInfo kstTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 
+            // Convert the UTC time to KST time
+            DateTime kstTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, kstTimeZone);
             // Format the local time using custom formatting
-            string formattedTime = localTime.ToString("HH:mm:ss MM'월'dd'일'(ddd)", new System.Globalization.CultureInfo("ko-KR"));
+            string formattedTime = kstTime.ToString("HH:mm:ss MM'월'dd'일'(ddd)", new System.Globalization.CultureInfo("ko-KR"));
 
             return formattedTime;
         }
@@ -1278,13 +1322,13 @@ namespace Gosub
         {
 
             // Parse the timestamp string into a DateTimeOffset object
-            DateTimeOffset kstTime = DateTimeOffset.Parse(timeString);
+            DateTime utctime = DateTime.Parse(timeString);
 
             // Get the KST time zone
             TimeZoneInfo kstTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time");
 
             // Convert KST time to local time
-            DateTime localTime = TimeZoneInfo.ConvertTime(kstTime.DateTime, kstTimeZone, TimeZoneInfo.Local);
+            DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(utctime, kstTimeZone);
 
             // Format the local time as desired ("오후 1:12")
             string formattedTime = localTime.ToString("tt h:mm", new System.Globalization.CultureInfo("ko-KR"));
@@ -1293,15 +1337,15 @@ namespace Gosub
             return formattedTime;
         }
 
-        static DateTime ConvertToKST(DateTime localTime)
+        static int CalculateTimeDifferenceInMinutes(string dateTimeString1, string dateTimeString2)
         {
-            // Get the time zone info for the KST time zone
-            TimeZoneInfo kstTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time");
+            DateTime dateTime1 = DateTime.Parse(dateTimeString1);
+            DateTime dateTime2 = DateTime.Parse(dateTimeString2);
 
-            // Convert local time to KST time
-            DateTime kstTime = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Local, kstTimeZone);
+            TimeSpan difference = dateTime2.Subtract(dateTime1);
+            int minutesDifference = (int)difference.TotalMinutes;
 
-            return kstTime;
+            return minutesDifference;
         }
     }
 }

@@ -62,8 +62,6 @@ namespace Gosub
                                     order_Detail_Frm.progressBar1.Value = 10;
                                     order_Detail_Frm.assignTime.Text = ConvertAndFormatTime2(o["transport"]["acceptedAt"].ToString());
                                     order_Detail_Frm.timeInfo.Text = string.Format("픽업까지 {0}분 남음", CalculateTimeDifferenceInMinutes(TimeZoneInfo.ConvertTimeToUtc(DateTime.Now).ToString("yyyy-MM-ddTHH:mm:ss.fff"), o["transport"]["pickupTime"].ToString()));
-                                    order_Detail_Frm.cookButton.Visible = true;
-                                    order_Detail_Frm.cookButton.Click += (ss, ee) => CookButton_Click(id);
                                 }
                                 if (o["transport"]["dispatchedAt"] == null)
                                 {
@@ -82,7 +80,6 @@ namespace Gosub
                                     {
                                         order_Detail_Frm.timeInfo.Text = string.Format("배달 완료 시간 {0}분 지남", deliverRestTime);
                                     }
-                                    order_Detail_Frm.cookButton.Visible = false;
                                 }
                                 if (o["transport"]["deliveredAt"] == null)
                                 {
@@ -93,9 +90,15 @@ namespace Gosub
                                     order_Detail_Frm.progressBar1.Value = 100;
                                     order_Detail_Frm.deliverTime.Text = ConvertAndFormatTime2(o["transport"]["deliveredAt"].ToString());
                                     order_Detail_Frm.timeInfo.Text = "";
-                                    order_Detail_Frm.cookButton.Visible = false;
                                 }
                             }
+
+                            if(o["preparationCompleted"].ToString() == "false")
+                            {
+                                order_Detail_Frm.cookButton.Visible = true;
+                            }     
+                            order_Detail_Frm.cookButton.Click += (ss, ee) => CookButton_Click(id);
+
                             order_Detail_Frm.orderShortCode.Text = "#" + o["shortCode"].ToString();
                             order_Detail_Frm.orderStatus.Text = o["state"].ToString();
                             JToken menus = o["items"];
@@ -211,17 +214,13 @@ namespace Gosub
             {
                 Task<IRestResponse> tx = Task.Run(() => Helper_Class.Send_Request($"https://crs.rpsyogiyo.io/api/1/deliveries/{id}/preparation-completion", Method.POST, null, "{}"));
                 tx.Wait();
-                if (!string.IsNullOrEmpty(tx.Result.Content))
+                JToken o = Helper_Class.Json_Responce(tx.Result.Content.ToString());
+
+                if (tx.Result.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    JToken o = Helper_Class.Json_Responce(tx.Result.Content.ToString());
-
-
-                    if (tx.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                    if (o.SelectToken("code").ToString() == "SUCCESS")
                     {
-                        if (o.SelectToken("code").ToString() == "SUCCESS")
-                        {
-                            MessageBox.Show("Cooked successfully!");
-                        }
+                        MessageBox.Show("Cooked successfully!");
                     }
                 }
 
